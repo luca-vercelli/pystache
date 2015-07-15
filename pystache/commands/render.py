@@ -68,8 +68,6 @@ def parse_args(sys_argv, usage):
     args = sys_argv[1:]
 
     parser = OptionParser(usage=usage)
-    parser.add_option('-y', action="store_true", dest="yaml", default=False,
-                      help="accept yaml as context format")
     options, args = parser.parse_args(args)
 
     if len(args) == 1:
@@ -124,6 +122,20 @@ def arg2text(arg):
                 # not a file, assumming first arg is template literal
                 return arg
 
+def extract_context(content, greedy=False):
+    if content.startswith(MARKER):
+        end = content.find(MARKER, len(MARKER))
+        frontmatter = content[len(MARKER):end]
+        content = content[end+len(MARKER):]
+        context = yaml.load(frontmatter)
+    elif greedy:
+        frontmatter = content
+        content = None
+        context = yaml.load(frontmatter)
+    else:
+        context = {}
+    return context, content
+
 def main(argv=None):
     if argv is None:
         argv = sys.argv
@@ -134,21 +146,13 @@ def main(argv=None):
         user_context, _ = read_yaml_frontmatter(sys.stdin)
     elif context:
         content = arg2text(context)
-        user_context = (yaml.load(content) if options.yaml else
-                        json.loads(content))
+        user_context, _ = extract_context(content, greedy=True)
     else:
         user_context = {}
 
     # assuming first arg is a filename or template literal
     template = arg2text(template)
-    if template.startswith(MARKER):
-        end = template.find(MARKER, len(MARKER))
-        frontmatter = template[len(MARKER):end]
-        template = template[end+len(MARKER):]
-        template_context = yaml.load(frontmatter)
-    else:
-        template_context = {}
-
+    template_context, template = extract_context(template)
     template_context.update(user_context)
     renderer = Renderer()
     rendered = renderer.render(template, template_context)
