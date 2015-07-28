@@ -163,7 +163,7 @@ def main(argv=None):
     template_context.update(user_context)
     renderer = Renderer()
     rendered = renderer.render(template, template_context)
-    print(rendered)
+    print(rendered.encode('utf-8'))
 
 if __name__ == '__main__':
     main()
