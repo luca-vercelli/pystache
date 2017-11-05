@@ -12,6 +12,11 @@ from . import common
 from . import defaults
 from .locator import Locator
 
+try:
+    unicode
+except:
+    unicode = str
+
 
 # We make a function so that the current defaults take effect.
 # TODO: revisit whether this is necessary.

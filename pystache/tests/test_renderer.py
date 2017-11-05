@@ -10,7 +10,7 @@ import os
 import sys
 import unittest
 
-from examples.simple import Simple
+from .examples.simple import Simple
 from pystache import Renderer
 from pystache.parser import parse
 from pystache import TemplateSpec
@@ -20,6 +20,11 @@ from pystache.loader import Loader
 
 from pystache.tests.common import get_data_path, AssertStringMixin, AssertExceptionMixin
 from pystache.tests.data.views import SayHello
+
+try:
+    unicode
+except:
+    unicode = str
 
 
 def _make_renderer():
