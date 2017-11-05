@@ -112,7 +112,7 @@ else:
     setup = dist.setup
 
 
-VERSION = '0.5.4'  # Also change in pystache/__init__.py.
+VERSION = '0.5.4-handlebars'  # Also change in pystache/__init__.py.
 
 FILE_ENCODING = 'utf-8'
 
@@ -317,7 +317,7 @@ Run the following command and commit the changes--
 #
 #   https://github.com/simplejson/simplejson/blob/master/CHANGES.txt
 #
-requires = []
+requires = ['PyYAML==3.11']
 if py_version < (2, 5):
     requires.append('simplejson<2.1')
 elif py_version < (2, 6):
