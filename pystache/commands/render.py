@@ -21,7 +21,7 @@ except ImportError:
         from sys import exc_info
         ex_type, ex_value, tb = exc_info()
         new_ex = Exception("%s: %s" % (ex_type.__name__, ex_value))
-        raise new_ex.__class__, new_ex, tb
+        raise new_ex.__class__(new_ex).with_traceback(tb)
 
 import yaml
 
